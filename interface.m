@@ -1,10 +1,13 @@
 classdef interface
   properties
-    method_table = {}
+    method_list = cell(0)
   end
   methods
     function self = add_method(self,handle,types)
-        self.method_table = [self.method_table;{handle},{types}];
+        self.method_list = [self.method_list,{handle},{types}];
+    end
+    function handle = activate(self)
+        handle = @(x) dispatch(self,x);
     end
     % Dispatch.m
     % Runtime multiple dispatch for Matlab.
@@ -16,30 +19,31 @@ classdef interface
     % # Example
     % function varargout = foo(varargin)
     %
-    %     methodTable = {@foo1, ["any"];  % dispatch based on number of inputs
+    %     methodList = {@foo1, ["any"];  % dispatch based on number of inputs
     %     @foo2, ["logical","logical"];   % dispatch based on type
     %     @foo3, ["numeric", "logical"];
     %     @foo3, ["logical", "numeric"];  % repeated method for different type
     %     @foo4, ["Person"];              % dispatch on class
     %     @foo5, ["any", "logical"]};
     %
-    %     [varargout{1:nargout}] = dispatch(varargin, methodTable);
+    %     [varargout{1:nargout}] = dispatch(varargin, methodList);
     %
     % end
     function varargout = dispatch(self,varargin)
 
-        methodTable = self.method_table;
+        methodList = self.method_list;
         var = varargin;
 
-        methodNum = size(methodTable,1);
-        for i=1:methodNum
-            if nargcheck(var,methodTable{i,2})
+        methodNum = length(methodList);
+        for i=1:2:methodNum
+            if nargcheck(var,methodList{i+1})
                 % only check types if nargin matches
-                if ismethod(var, methodTable{i,2})
+                if ismethod(var, methodList{i+1})
                     % call the candidate matching method
                     try % the only way I know to check for nargout match
-                        [varargout{1:nargout}] = methodTable{i,1}(var{:});
+                        [varargout{1:nargout}] = methodList{i}(var{:});
                     catch
+                        disp continue
                         continue % there might be another method matching
                     end
                     return
