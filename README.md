@@ -1,12 +1,18 @@
-# Dispatch.m
- Runtime multiple dispatch for Matlab.
+# Organized multiple dispatch in Matlab
 
-- Dispatch based on the number of arguments
-- Dispatch based on the type of arguments
-- Supported for code generation
+Matlab has always shined for its great dynamic capabilities, so that _runtime polymorphism_ is surely a core feature of the language. Nevertheless the lack of type annotations in function declarations or any other trace of an explicit type system makes quite tedious to build robust _library_ code (for which standard [duck typing] would probably generate a high degree of unsafety and obscure error messages), since any check on input values has to be carried by disseminating the code with explicit assertions, via a bunch of intrinsics like `isnumeric`, `ischar`, `isreal`, etc. Here we provide an experimental API to allow a more systematic way of dealing with runtime polymorphism, by mimicking [Julia's approach to multiple dispatch](https://youtu.be/kc9HwsxE1OY), or perhaps more crucially in the matlab worldview, by restricting the unlimited dynamism of the language to a more strict type hierarchy in function calls: you write many small atomic function-methods, meant to accept a few or even a single combination of types and let the dispatcher choose which implementation to call when the generic function-name is invoked. Arguably this leads to better compartmentalized development and subsequent easier maintenance, with respect to the usual big-and-generic-function-that-handles-it-all approach.
 
+Currently we support:
+- Dispatch on the number of arguments (both in and out!)
+- Dispatch on the type of arguments (both intrinsic and custom[^1]) 
+   
+Planned:
+- Dispatch on keyword arguments (via [`inputParser`](https://www.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html)). It might take a while, for now just avoid varargins in the specialized implementations.
 
-Write a function like the following example as a template. Use `dispatch(varargin, methodTable)` function to invoke methods.
+## Example of Usage
+
+Write a function like the following example as your generic interface. Use `dispatch(varargin, methodTable)` in its body to define the dispatch to various specialized methods (which should be visible to the generic caller). The methodTable cell container would define the input type annotations for the multiple dispatch.
+
 ```matlab
 function varargout = foo(varargin)
 
@@ -22,7 +28,7 @@ function varargout = foo(varargin)
 end
 ```
 
-Wrtie different functions as methods.
+The specialized methods could look like:
 
 ```matlab
 function out = foo1(a)
@@ -48,7 +54,7 @@ function [out1,out2] = foo5(a,b)
 end
 ```
 
-Now let's test the example:
+Usage in scripts, functions or command line would then be:
 ```matlab
 % dispatch based on number of inputs
 >> foo(2)
@@ -96,14 +102,13 @@ ans =
 error: no method found
 ```
 
-# Note
-- ~~You can't have multiple outputs for your function. Instead return the outputs as an array or cell of outputs.~~ FIXED by @bellomia, with a soft change in API: the top-level wrapper (`foo` in the example) has to feature the [`varargout`](https://www.mathworks.com/help/matlab/ref/varargout.html) syntax.
+[^1]: Please note that you [can't define custom types as matlab structs](https://www.mathworks.com/help/matlab/matlab_oop/example-representing-structured-data.html), since they have no name and all share `struct` as their type. You can instead implement your custom types with the [`classdef` keyword](https://www.mathworks.com/help/matlab/ref/classdef.html) and have it work fine with the matlab-multiple-dispatch API.
 
-- You can't dispatch on the name of the structs. Instead define simple class with just properties (See Person).
+## License and Copyright
 
-# License
-This is written as part of my Master's thesis and it is licensed under Apache V2, so cite this paper if you use it:
-```
-A. Yahyaabadi, P. Ferguson, ”An intelligent multi-vehicle drone testbed for space systems and remote sensing veriﬁcation,” in Canadian Aeronautics and Space Institute (CASI) ASTRO, Canada, 2019
-```
-In case of changes, either make pull requests to this repository or state the changes.
+The code is based on [original work](https://github.com/aminya/Dispatch.m) by A. Yahyaabadi, as such it inherits the [Apache v2 license](./LICENSE). Some fix and new functionality has been added by G. Bellomia and more changes are planned in the near future, especially regarding testing and profiling.
+<!-- cite as: <bibtex?zenodo?> -->
+
+
+
+

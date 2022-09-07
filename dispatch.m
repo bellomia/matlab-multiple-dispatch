@@ -1,7 +1,7 @@
 % Dispatch.m
 % Runtime multiple dispatch for Matlab.
 % Apache V2 License
-% Copyright (c) 2020 Amin Yahyaabadi, aminyahyaabadi74@gmail.com
+% Copyright (c) 2020 Amin Yahyaabadi, aminyahyaabadi74@gmail.com [original]
 % Copyright (c) 2022 Gabriele Bellomia, gbellomia@live.it [multiple output] 
 % https://github.com/aminya/Dispatch.m
 %
