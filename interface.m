@@ -1,34 +1,39 @@
+% Runtime multiple dispatch for Matlab.
+% Apache V2 License
+% Copyright (c) 2020 Amin Yahyaabadi [original dispatch.m function]
+% Copyright (c) 2022 Gabriele Bellomia [multimethod.interface class] 
+%
+% # Example
+% function varargout = foo(varargin)
+%
+%     methodList = {@foo1, ["any"];  % dispatch based on number of inputs
+%     @foo2, ["logical","logical"];   % dispatch based on type
+%     @foo3, ["numeric", "logical"];
+%     @foo3, ["logical", "numeric"];  % repeated method for different type
+%     @foo4, ["Person"];              % dispatch on class
+%     @foo5, ["any", "logical"]};
+%
+%     [varargout{1:nargout}] = dispatch(varargin, methodList);
+%
+% end
 classdef interface
+
   properties
+
     method_list = cell(0)
+
   end
+
   methods
+
     function self = add_method(self,handle,types)
         self.method_list = [self.method_list,{handle},{types}];
     end
+
     function handle = activate(self)
-        handle = @(x) dispatch(self,x);
+        handle = @(varargin) dispatch(self,varargin{:});
     end
-    % Dispatch.m
-    % Runtime multiple dispatch for Matlab.
-    % Apache V2 License
-    % Copyright (c) 2020 Amin Yahyaabadi, aminyahyaabadi74@gmail.com [original]
-    % Copyright (c) 2022 Gabriele Bellomia, gbellomia@live.it [multiple output] 
-    % https://github.com/aminya/Dispatch.m
-    %
-    % # Example
-    % function varargout = foo(varargin)
-    %
-    %     methodList = {@foo1, ["any"];  % dispatch based on number of inputs
-    %     @foo2, ["logical","logical"];   % dispatch based on type
-    %     @foo3, ["numeric", "logical"];
-    %     @foo3, ["logical", "numeric"];  % repeated method for different type
-    %     @foo4, ["Person"];              % dispatch on class
-    %     @foo5, ["any", "logical"]};
-    %
-    %     [varargout{1:nargout}] = dispatch(varargin, methodList);
-    %
-    % end
+
     function varargout = dispatch(self,varargin)
 
         methodList = self.method_list;
@@ -57,6 +62,7 @@ classdef interface
 
     
   end
+
 end
 
 function out = nargcheck(var, typearray)
