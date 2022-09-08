@@ -1,11 +1,11 @@
-classdef Person 
+classdef person 
     properties
         name
         age
     end   
     methods
         % constructor
-        function obj = Person(name,age)
+        function obj = person(name,age)
             obj.name = name;
             obj.age = age;
         end
