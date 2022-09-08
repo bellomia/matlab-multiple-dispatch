@@ -12,102 +12,31 @@ Planned:
 
 ## Example of Usage
 
-Write a function like the following example as your generic interface. Use `dispatch(varargin, methodTable)` in its body to define the dispatch to various specialized methods (which should be visible to the generic caller). The methodTable cell container would define the input type annotations for the multiple dispatch.
-
-```matlab
-function varargout = foo(varargin)
-
-    methodTable = {@foo1, ["any"];  % dispatch based on number of inputs
-    @foo2, ["logical","logical"];   % dispatch based on type
-    @foo3, ["numeric", "logical"];
-    @foo3, ["logical", "numeric"];  % repeated method for different type
-    @foo4, ["Person"];              % dispatch on class
-    @foo5, ["any", "logical"]};             
-
-    [varargout{1:nargout}] = dispatch(varargin, methodTable);
-
-end
-```
-
-The specialized methods could look like:
-
-```matlab
-function out = foo1(a)
-    out = a;
-end
-
-function out = foo2(a, b)
-   out = logical(a && b);
-end
-
-function out = foo3(a, b)
-    out = a * b;
-end
-
-function [out1,out2] = foo4(p)
-    out1 = p.name;
-    out2 = p.age;
-end
-
-function [out1,out2] = foo5(a,b)
-    out1 = a;
-    out2 = b;
-end
-```
-
-Usage in scripts, functions or command line would then be:
-```matlab
-% dispatch based on number of inputs
->> foo(2)
-ans =
-     2
-```
-```matlab
-% dispatch based on type
->> foo(true, false)
-ans =
-  logical
-   0
-```
-```matlab
-% dispatch based on type
->> foo(2, true)
-ans =
-  2
-```
-```matlab
-% dispatch on number of output args
->> p = Person("Amin",25);
->> foo(p) % dispatches on foo1
-ans = 
-  Person with properties:
-    name: "Amin"
-     age: 25
-
->> [a,b] = foo(p) % dispatches on foo4
-a = 
-    "Amin"
-b =
-    25
-```
-```matlab
-% dispatch on any type
->> foo({2},true)
-ans =
-  logical
-   1
-```
-```matlab
-% error handling
->> foo({2},p)
-error: no method found
-```
+🚧 Work ⚠️ in 🪜 Progress 🚧
+> we are changing API on this branch
+---
 
 [^1]: Please note that you [can't define custom types as matlab structs](https://www.mathworks.com/help/matlab/matlab_oop/example-representing-structured-data.html), since they have no name and all share `struct` as their type. You can instead implement your custom types with the [`classdef` keyword](https://www.mathworks.com/help/matlab/ref/classdef.html) and have it work fine with the matlab-multiple-dispatch API.
 
 ## License and Copyright
-
 The code is based on [original work](https://github.com/aminya/Dispatch.m) by A. Yahyaabadi, as such it inherits the [Apache v2 license](./LICENSE). Some fix and new functionality has been added by G. Bellomia and more changes are planned in the near future, especially regarding testing and profiling.
+```
+Copyright 2020 Amin Yahyaabadi [original dispatch.m function]    
+Copyright 2022 Gabriele Bellomia [multimethod.interface class] 
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
 <!-- cite as: <bibtex?zenodo?> -->
 
 
