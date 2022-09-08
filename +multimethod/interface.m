@@ -2,7 +2,7 @@
 % Apache V2 License
 % Copyright (c) 2020 Amin Yahyaabadi [original dispatch.m function]
 % Copyright (c) 2022 Gabriele Bellomia [multimethod.interface class] 
-classdef interface
+classdef interface %< matlab.mixin.indexing.RedefinesParen
 
   properties
 
@@ -86,7 +86,22 @@ classdef interface
         disp(obj)
         return
     end
+
+    %% functor overload
+    function varargout = subsref(obj,indexing)
+    % >> varargout = multimethod_obj(varargin)
+        % if not(isequal(indexing.type,'{}'))
+        %     fprintf(2,"Error: braces and dots not supported for multimethod interfaces\n")
+        %     [varargout{1:nargout}] = {};
+        %     return
+        % end
+        indexing.type
+        indexing.subs{:}
+        [varargout{:}] = obj.dispatch(indexing.subs{:});
+    end
+
   end
+
 end
 
 %% private
