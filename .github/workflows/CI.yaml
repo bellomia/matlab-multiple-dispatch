@@ -1,0 +1,49 @@
+# Run .test/ scripts and check output against commit
+name: Generic
+on: # setup triggers
+  workflow_dispatch: # manual-run
+    inputs:
+      release:
+        description: 'MATLAB RELEASE'     
+        required: true
+        default: 'R2020b' 
+        type: choice
+        options:
+        - latest
+        - R2022a
+        - R2021b
+        - R2021a
+        - R2020b
+        - R2020a
+  workflow_call:    # subroutine-like
+    inputs:
+      release:
+        description: 'MATLAB RELEASE'     
+        required: true
+        type: string
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      # Clone this repository on the GitHub Actions runner 
+      - uses: actions/checkout@v3
+      - name: Define RELEASE
+        id  : release
+        run : | # here we use /shell parameter expansion/
+          RELEASE=${{ github.event.inputs.release }}
+          echo "::set-output name=default::${RELEASE:-"R2020b"}"
+      # Setup MATLAB on the GitHub Actions runner
+      - name: Setup MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:      # retrieve previously exported value
+          release: ${{ steps.release.outputs.default}}
+      - name: Run TESTSUITE
+        uses: matlab-actions/run-tests@v1
+        with:
+          source-folder: .
+          code-coverage-cobertura: .test/coverage.xml
+      # Upload coverage-report to CODECOV
+      - name: Run CODECOV
+        uses: codecov/codecov-action@v3
+        with:
+          file: .test/coverage.xml
