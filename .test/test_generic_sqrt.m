@@ -32,4 +32,5 @@ function test_sqrt_dispatch
     fprintf('multisqrt("4") = %d\n\n',multisqrt("4"));
 
     rmpath(root);
+
 end

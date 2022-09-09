@@ -5,6 +5,7 @@ classdef (Sealed = true) interface
 
   properties (SetAccess = protected)
 
+
     method_table = cell(0)
 
   end
@@ -16,6 +17,7 @@ classdef (Sealed = true) interface
     % >> multimethod_interface = interface(@fun_1,sign_1,@fun_2,sign_2...)
     % @fun_i are function handles or lambda functions
     % sign_i are input type signatures :: string arrays (no char arrays!)
+
         if mod(nargin,2) == 1
             fprintf(2,'Error: number of input arguments must be even')
             return
@@ -76,5 +78,5 @@ classdef (Sealed = true) interface
     end
 
   end
-
+  
 end
