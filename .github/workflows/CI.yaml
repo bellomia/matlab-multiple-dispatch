@@ -47,3 +47,9 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           file: .test/coverage.xml
+      # Upload coverage-report to SonarCloud
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
