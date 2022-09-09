@@ -19,19 +19,19 @@ classdef (Sealed = true) interface
     % sign_i are input type signatures :: string arrays (no char arrays!)
 
         if mod(nargin,2) == 1
-            fprintf(2,'Error: number of input arguments must be even')
+            fprintf(2,'Error: number of input arguments must be even\n')
             return
         end
         if not(visa(varargin(1:2:end),"function_handle"))
-            fprintf(2,'Error: odd input arguments must be functions')
+            fprintf(2,'Error: odd input arguments must be functions\n')
             return
         end
         if not(visa(varargin(2:2:end),"string"))
-            fprintf(2,'Error: even input arguments must be strings')
+            fprintf(2,'Error: even input arguments must be strings\n')
             return
         end
         if nargout < 1
-            disp 'Emitting new instance of multimethod interface'
+            disp 'Emitting new instance of multimethod interface\n'
         end
         for i = 1:nargin
             functor.method_table{i} = varargin{i};
