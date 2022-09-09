@@ -16,6 +16,7 @@ Currently we support:
 Planned:
 - Dispatch on keyword arguments (via [`inputParser`](https://www.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html)). It might take a while, for now just avoid varargins in the specialized implementations.
 
+
 [^1]: This needs clarifications, I intend to write a careful note, for now 🚧 Work ⚠️ in 🪜 Progress 🚧
 
 [^2]: Please note that you [can't define custom types as matlab structs](https://www.mathworks.com/help/matlab/matlab_oop/example-representing-structured-data.html), since they have no name and all share `struct` as their type. You can instead implement your custom types with the [`classdef` keyword](https://www.mathworks.com/help/matlab/ref/classdef.html) and have it work fine with the matlab-multiple-dispatch API.
@@ -23,7 +24,7 @@ Planned:
 ## Example of Usage
 
 🚧 Work ⚠️ in 🪜 Progress 🚧
-> we are changing API on this branch
+> we have just changed API, wait a bit :)
 ---
 
 ## License and Copyright

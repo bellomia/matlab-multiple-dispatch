@@ -3,23 +3,23 @@ class_based_dispatch()
 
 function class_based_dispatch
 
+    root = erase(fileparts(mfilename('fullpath')),'.test');
+    addpath(root) % we need to see the +multimethod namespace
+
     % Custom defined person type (see person.m)
     gb = person('Gabriele Bellomia',28) %#ok to print
     % Built-in data structure to represent a person
     cm = struct('name','Cleve Barry Moler','age',83) %#ok to print
 
-    here = pwd;
-    cd .. % we need to see the +multimethod namespace
-
-    f = multimethod.interface();
-    f = f.add_method(@who_am_i__struct,"struct");
-    f = f.add_method(@who_am_i__person,"person");
-    disp(f); who_am_I = f.activate %#ok to print
+    who_am_I = multimethod.interface();
+    who_am_I = multimethod.addmethod(who_am_I,@who_am_i__struct,"struct");
+    who_am_I = multimethod.addmethod(who_am_I,@who_am_i__person,"person");
+    multimethod.showtable(who_am_I)
 
     who_am_I(gb);
     who_am_I(cm);
 
-    cd(here)
+    rmpath(root)
 
 end
 
