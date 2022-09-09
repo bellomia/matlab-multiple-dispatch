@@ -14,6 +14,7 @@ function varargout = dispatch(functor,varargin)
     type_list = table_list(2:2:end);
     var = varargin;
     methodNum = length(method_list);
+    counter = 0;
     for i=1:methodNum
         if nargcheck(var,type_list{i})
             % only check types if nargin matches
@@ -21,14 +22,22 @@ function varargout = dispatch(functor,varargin)
                 % call the candidate matching method
                 try % the only way I know to check for nargout match
                     [varargout{1:nargout}] = method_list{i}(var{:});
+                    counter = counter + 1;
                 catch
                     continue % there might be another method matching
                 end
-                return
             end
         end
     end
-    fprintf(2,"Error: no matching specialized method found in\n")
-    multimethod.showtable(functor)
+    if counter == 0
+        fprintf(2,"Error: no matching specialized method found in\n")
+        multimethod.showtable(functor)
+        [varargout{1:nargout}] = [];
+    end
+    if counter > 1
+        fprintf(2,"Error: more than one matching method found in\n")
+        multimethod.showtable(functor)
+        [varargout{1:nargout}] = [];
+    end
     return
 end

@@ -45,7 +45,8 @@ classdef (Sealed = true) interface
             case '()'
                 [varargout{1:nargout}] = multimethod.dispatch(functor,indexing.subs{:});
             case '{}'
-                error('{} indexing not supported for multimethod functorects')
+                fprintf(2,'{·} indexing not supported for multimethod interfaces\n')
+                [varargout{1:nargout}] = []; 
             otherwise
                 [varargout{1:nargout}] = builtin('subsref', functor, indexing);
         end
@@ -58,9 +59,20 @@ classdef (Sealed = true) interface
     % the equality of two multimethod functors (duplicate methods unaware)
         ftable = functor.method_table;
         gtable = gunctor.method_table;
-        %ftable = unique(ftable); DOES NOT WORK
-        %gtable = unique(gtable); WE SHOULD FIX
+        %ftable = unique(ftable); DOES NOT WORK: generic cells cannot sort
+        %gtable = unique(gtable); WE SHOULD FIX: but how? containers.Map?
         bool = isequal(ftable,gtable);
+    end
+
+    %% addition overloader
+    function sumntor = plus(functor,gunctor)
+    % >> f_interface + g_interface
+    % This is a special operator overload that defines addition of two
+    % interfaces, by concatenating their method tables (noncommutative)
+        ftable = functor.method_table;
+        gtable = gunctor.method_table;
+        stable = horzcat(ftable,gtable);
+        sumntor = multimethod.interface(stable{:});
     end
 
   end

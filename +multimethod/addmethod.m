@@ -7,7 +7,7 @@
 function functor = addmethod(functor,handle,types)
     valid_types_format = visa({types},"string");
     if not(valid_types_format)
-        fprintf(2,'Error: type_signature must be a string array')
+        fprintf(2,'Error: type_signature must be a string array\n')
         return
     end
     if nargout < 1
