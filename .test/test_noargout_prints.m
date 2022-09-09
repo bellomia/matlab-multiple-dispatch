@@ -2,14 +2,13 @@ test_no_argouts()
 
 function test_no_argouts
 
-    here = pwd;
-    cd .. % we need to see the +multimethod namespace
+    root = erase(fileparts(mfilename('fullpath')),'.test');
+    addpath(root) % we need to see the +multimethod namespace
 
     multimethod.interface
-    ans.add_method(@sin,"any")
-    ans.activate
+    multimethod.addmethod(ans,@sin,"any")
     ans(pi/2)
 
-    cd(here)
+    rmpath(root)
 
 end
