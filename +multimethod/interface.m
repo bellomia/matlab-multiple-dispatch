@@ -42,7 +42,9 @@ classdef (Sealed = true) interface
     function varargout = subsref(functor,indexing)
     % >> varargout = multimethod_interface(varargin)
     % This is a special operator overload that makes the interface behave 
-    % as a regular generic function, that dispatches on specialized methods
+    % as a regular generic function that dispatches on specialized methods.
+    % The dispatch happens by parsing the internal method-signature table,
+    % and selecting the first match (same input signature and nargout).
         switch(indexing.type)
             case '()'
                 [varargout{1:nargout}] = multimethod.dispatch(functor,indexing.subs{:});
@@ -61,16 +63,16 @@ classdef (Sealed = true) interface
     % the equality of two multimethod functors (duplicate methods unaware)
         ftable = functor.method_table;
         gtable = gunctor.method_table;
-        %ftable = unique(ftable); DOES NOT WORK: generic cells cannot sort
-        %gtable = unique(gtable); WE SHOULD FIX: but how? containers.Map?
         bool = isequal(ftable,gtable);
     end
 
     %% addition overloader
     function sumntor = plus(functor,gunctor)
     % >> f_interface + g_interface
-    % This is a special operator overload that defines addition of two
-    % interfaces, by concatenating their method tables (noncommutative)
+    % This is a special operator overload defining noncommutative addition 
+    % of two interfaces, by concatenating their method tables.
+    % Noncommutativity is crucial to define priority in dispatch, since we
+    % parse the method table sequentially and exit at first match.
         ftable = functor.method_table;
         gtable = gunctor.method_table;
         stable = horzcat(ftable,gtable);

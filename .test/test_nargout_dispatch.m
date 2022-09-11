@@ -9,17 +9,17 @@ function dispatch_on_nargout
 
     disp(f)
     disp('Unfortunately we cannot discriminate methods on nargout')
-    disp('but still we can capture a variable number of  outputs,')
-    disp('so nargout polymorphism is still doable inside methods.')
-
+    disp('but still we can capture a variable number of outputs, ')
+    disp('so nargout polymorphism is recoverable inside methods. ')
+    disp(' ')
     disp('x = 2*pi*rand(3)');
-    x = 2*pi*rand(3) %#ok to print
+    x = 2*pi*rand(3); disp(x)
 
     disp("Compute tan(x) as t = f(x)")
-    t = f(x) %#ok to print
+    t = f(x); disp(t)
 
     disp("Compute tan(x) as [s,c] = f(x); t = s./c")
-    [s,c] = f(x); s./c %#ok to print
+    [s,c] = f(x); disp(s./c) 
     assert(norm(t-s./c)/norm(t)<1e-8,"Error: the two tangents do not match")
 
     disp("Compute everything within method as [t,s,c] = f(x)")
