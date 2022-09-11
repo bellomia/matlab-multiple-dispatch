@@ -21,7 +21,6 @@ on: # setup triggers
         description: 'MATLAB RELEASE'     
         required: true
         type: string
-  push:
 jobs:
   CI:
     runs-on: ubuntu-latest

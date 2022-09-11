@@ -1,12 +1,12 @@
 # Organized multiple dispatch in Matlab
 
-![Lifecycle:Experimental](https://img.shields.io/static/v1?label=lifecycle&message=experimental&logo=git&color=gold&style=flat-square)
-[![Codecov](https://img.shields.io/codecov/c/github/bellomia/matlab-multiple-dispatch?label=coverage&logo=codecov&style=flat-square)](https://codecov.io/gh/bellomia/matlab-multiple-dispatch)
 [![R2020a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2020a?label=R2020a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2020a.yaml)
 [![R2020b](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2020b?label=R2020b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021a.yaml)
 [![R2021a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2021a?label=R2021a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021a.yaml)
 [![R2021b](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2021b?label=R2021b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021b.yaml)
 [![R2022a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2022a?label=R2022a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2022a.yaml)
+[![Codecov](https://img.shields.io/codecov/c/github/bellomia/matlab-multiple-dispatch?label=coverage&logo=codecov&style=flat-square)](https://codecov.io/gh/bellomia/matlab-multiple-dispatch)
+![Lifecycle:Experimental](https://img.shields.io/static/v1?label=lifecycle&message=experimental&logo=git&color=gold&style=flat-square)
 
 Matlab has always shined for its great dynamic capabilities, so that _runtime polymorphism_ is basically a core feature of the language. Nevertheless the lack of type annotations in function declarations or any other trace of an explicit type system makes quite tedious to build robust _library_ code (for which standard [duck typing] would probably generate a high degree of unsafety and obscure error messages), since any check on input values has to be carried by disseminating the code with explicit assertions, via a bunch of intrinsics like `isnumeric`, `ischar`, `isreal`, etc. Here we provide an _experimental_ API to allow a more systematic way of dealing with runtime polymorphism, by mimicking [Julia's approach to multiple dispatch](https://youtu.be/kc9HwsxE1OY), or perhaps more crucially in the matlab worldview, by restricting the unlimited dynamism of the language to a more strict type hierarchy in function calls: you write many small atomic function-methods, meant to accept a few or even a single combination of types and let the dispatcher choose which implementation to call when the generic function-name is invoked. Arguably this leads to better compartmentalized development and subsequent easier maintenance, with respect to the usual big-and-generic-function-that-handles-it-all approach.
 
@@ -29,10 +29,10 @@ Planned:
 ---
 
 ## License and Copyright
-The code is based on [original work](https://github.com/aminya/Dispatch.m) by A. Yahyaabadi, as such it inherits the [Apache v2 license](./LICENSE). Some fix and new functionality has been added by G. Bellomia and more changes are planned in the near future, especially regarding testing and profiling.
+The code is based on [original work](https://github.com/aminya/Dispatch.m) by A. Yahyaabadi, as such it inherits the [Apache v2 license](./LICENSE). Deeply refactored to enable new functionality and provide as most an ergonomic user experience as possible. The new API is accompanied by a thorough test-suite, that can be ran entering the `.test/` directory and invoking the `runtests` matlab command.
 ```
 Copyright 2020 Amin Yahyaabadi [original dispatch.m function]    
-Copyright 2022 Gabriele Bellomia [multimethod.interface class] 
+Copyright 2022 Gabriele Bellomia [full multimethod namespace] 
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
