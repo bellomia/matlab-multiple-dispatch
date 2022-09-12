@@ -6,9 +6,10 @@ function test_no_argouts
     addpath(root) % we need to see the +multimethod namespace
 
     multimethod.interface
-    multimethod.addmethod(ans,@sin,"any")
+    multimethod.addmethod(ans,@sin,"float")
+    multimethod.addfallback(ans,@cos,"any")
     ans(pi/2)
 
-    rmpath(root)
+    
 
 end

@@ -38,6 +38,6 @@ function test_eq_and_plus_operators
     disp('>> f == f')
     f == f %#ok to print
 
-    rmpath(root)
+    
 
 end

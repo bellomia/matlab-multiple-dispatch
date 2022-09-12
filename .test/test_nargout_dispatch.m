@@ -26,7 +26,7 @@ function dispatch_on_nargout
     [t,s,c] = f(x) %#ok to print
     assert(norm(t-s./c)/norm(t)<1e-8,"Error: the two tangents do not match")
 
-    rmpath(root);
+    
 
 end
 

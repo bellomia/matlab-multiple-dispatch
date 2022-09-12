@@ -62,7 +62,7 @@ function class_based_dispatch
     encounter(whisky,lucy)
     encounter(lucy,rex)
 
-    rmpath(root)
+    
 
 end
 

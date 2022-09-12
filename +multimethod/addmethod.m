@@ -13,7 +13,7 @@ function functor = addmethod(functor,handle,types)
         return
     end
     if nargout < 1
-        disp 'Appending new implementation to multimethod interface'
+        disp 'Prepending new implementation to multimethod interface'
     end
     old_table = functor.method_table;
     new_table = [{handle},{types},old_table];

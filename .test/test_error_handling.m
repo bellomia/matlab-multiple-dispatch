@@ -47,12 +47,13 @@ function test_runtime_errors
     disp(" ")
 
 
-    %% addmethod
+    %% addmethod / addfallback
     disp("ADDMETHOD FUNCTION")
     disp(' ')
     disp("Finally, remember that you cannot give type signatures as chars:")
     disp(">> f = addmethod(f,@sqrt,'float')")
     f = multimethod.addmethod(f,@sqrt,'float');
+    f = multimethod.addfallback(f,@sqrt,'float'); % damn coverage...
     disp(' ')
     multimethod.showtable(f)
     disp("So we need to provide them always as string (arrays):")
@@ -60,7 +61,7 @@ function test_runtime_errors
     f = multimethod.addmethod(f,@sqrt,"float"); multimethod.showtable(f)
 
 
-    rmpath(root);
+    
 end
 
 function [s,c] = sin_and_cos(x)

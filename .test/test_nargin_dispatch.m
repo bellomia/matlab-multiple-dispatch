@@ -24,7 +24,7 @@ function dispatch_on_nargin
 
     fprintf("sqrt(xx+yy+zz) = %f\n\n",f(rand,rand,rand))
 
-    rmpath(root);
+    
 
 end
 

@@ -60,6 +60,6 @@ function test_dispatch_priorities
     disp('>> exactplus("fall","back")')
     exactplus("fall","back")
 
-    rmpath(root)
+    
 
 end
