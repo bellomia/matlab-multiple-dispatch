@@ -11,7 +11,7 @@
 Matlab has always shined for its great dynamic capabilities, so that _runtime polymorphism_ is basically a core feature of the language. Nevertheless the lack of type annotations in function declarations or any other trace of an explicit type system makes quite tedious to build robust _library_ code (for which standard [duck typing] would probably generate a high degree of unsafety and obscure error messages), since any check on input values has to be carried by disseminating the code with explicit assertions, via a bunch of intrinsics like `isnumeric`, `ischar`, `isreal`, etc. Here we provide an _experimental_ API to allow a more systematic way of dealing with runtime polymorphism, by mimicking [Julia's approach to multiple dispatch](https://youtu.be/kc9HwsxE1OY), or perhaps more crucially in the matlab worldview, by restricting the unlimited dynamism of the language to a more strict type hierarchy in function calls: you write many small atomic function-methods, meant to accept a few or even a single combination of types and let the dispatcher choose which implementation to call when the generic function-name is invoked. Arguably this leads to better compartmentalized development and subsequent easier maintenance, with respect to the usual big-and-generic-function-that-handles-it-all approach.
 
 Currently we support:
-- Dispatch on the number of arguments (both in and out![^1])
+- Dispatch on the number of arguments (both in and out[^1])
 - Dispatch on the type of arguments (both intrinsic and custom[^2]) 
    
 Planned:
@@ -21,6 +21,19 @@ Planned:
 [^1]: This needs clarifications, I intend to write a careful note, for now 🚧 Work ⚠️ in 🪜 Progress 🚧
 
 [^2]: Please note that you [can't define custom types as matlab structs](https://www.mathworks.com/help/matlab/matlab_oop/example-representing-structured-data.html), since they have no name and all share `struct` as their type. You can instead implement your custom types with the [`classdef` keyword](https://www.mathworks.com/help/matlab/ref/classdef.html) and have it work fine with the matlab-multiple-dispatch API.
+
+----
+<!-- toc -->
+#### Table of Contents
+- [Usage](#usage)
+  * [Classic double dispatch on input types](#classic-double-dispatch-on-input-types)
+  * [Getting function handles for interfaces](#getting-function-handles-for-interfaces)
+  * [Add methods and fallbacks to an existing interface](#add-methods-and-fallbacks-to-an-existing-interface)
+  * [Dispatch on number of input arguments](#dispatch-on-number-of-input-arguments)
+  * [Dispatch on number of _output_ arguments](#dispatch-on-number-of-_output_-arguments)
+- [License and Copyright](#license-and-copyright)
+<!-- tocstop -->
+----
 
 ## Usage
 
@@ -116,10 +129,23 @@ function encounter(a,b)
     fprintf("\n • %s meets %s and %s\n",a.name,b.name,act)
 end
 
-encounter(fido,rex)
-encounter(fido,whisky)
-encounter(whisky,lucy)
-encounter(lucy,rex)
+%% ON THE COMMAND LINE:
+
+>> encounter(fido,rex)
+
+• Fido meets Rex and sniffs
+
+>> encounter(fido,whisky)
+
+• Fido meets Whiskers and chases
+
+>> encounter(whisky,lucy)
+
+• Whiskers meets Lucifer and purrs
+
+>> encounter(lucy,rex)
+
+• Lucifer meets Rex and hisses
 ```
 So you see the magic:
 
@@ -136,7 +162,7 @@ Internally the `action(varargin)` syntax is an alias for the extended `multimeth
 
 ```matlab
 >> h = @(a,b)multimethod.dispatch(action,a,b);
-%% Would work
+%  Would work
 >> should_sniff = h(fido,rex)
 
 should_sniff = 
@@ -144,7 +170,7 @@ should_sniff =
     "sniffs"
 
 >> h = @(a,b)action(a,b)
-%% Would work
+%  Would work
 >> should_hiss = h(lucy,rex)
 
 should_hiss = 
@@ -154,13 +180,13 @@ should_hiss =
 >> f = multimethod.interface(@(x)sin(x),"numeric",...
                  @(s)sin(str2double(s)),"string");
 >> h = @f;  
-%% Would NOT work, since 'f' does not invoke '()'
-%% and then is not recognized as a function:
+%  Would NOT work, since 'f' does not invoke '()'
+%  and then is not recognized as a function:
 >> h(pi/2)
 Unrecognized function or variable 'f'.
-%% But if you always stick to explicit parentheses:
+%  But if you always stick to explicit parentheses:
 >> h = @(type)f(type);
-%% it would work as expected!
+%  it would work as expected!
 >> one = h(pi/2)
 
 one = % dispatch on @(x)sin(x)
@@ -190,7 +216,7 @@ Suppose some library provides the following multimethod object:
     {@(x,y)plus(double(x),y)}    {["integer"    "float"]}
     {@(x,y)plus(x,double(y))}    {["float"    "integer"]}
 
-%% Such that
+%  Such that
 
 >> 3 + 4.5 == exactplus(3,4.5)
 
@@ -200,7 +226,7 @@ ans =
 
    1
 
-%% But
+%  But
 
 >> int8(3) + 4.5 == exactplus(int8(3),4.5)
 
@@ -210,7 +236,7 @@ ans =
 
    0
 
-%% Since
+%  Since
 
 >> int8(3) + 4.5
 
@@ -291,8 +317,8 @@ ans =
 
    8  
 
-%% NO! We are shadowing the specialized methods for integers here!
-%% > Let's use instead multimethod.addfalback:
+%  NO! We are shadowing the specialized methods for integers here!
+%  --> Let's use instead multimethod.addfallback:
 >> import multimethod.addfallback
 >> exactplus = addfallback(exactplus,@plus,["any","any"]);
 >> multimethod.showtable(exactplus)
@@ -346,19 +372,19 @@ ans =
 
     0.1411
 
-%% So f() it's just a single-method interface for a 
-%% sine acting on integer angles (ndr. sin does not 
-%% take integers in matlab). Of course we'd want to 
-%% call just @sin for a float, for optimal speed.
-%% Suppose we don't know about the "float" abstract
-%% class, but only about "numeric", which includes
-%% integers. Adding {@sin, ["numeric"]} to the top 
-%% will of course overshadow the original method,
-%% so breaking the functionality for integers.
-%% Adding instead two string-friendly entries for
-%% both the "string" and the "char" types poses no
-%% problems whatsoever, so that might well come on 
-%% top of everything. All this can be obtained as:
+%  So f() it's just a single-method interface for a 
+%  sine acting on integer angles (ndr. sin does not 
+%  take integers in matlab). Of course we'd want to 
+%  call just @sin for a float, for optimal speed.
+%  Suppose we don't know about the "float" abstract
+%  class, but only about "numeric", which includes
+%  integers. Adding {@sin, ["numeric"]} to the top 
+%  will of course overshadow the original method,
+%  so breaking the functionality for integers.
+%  Adding instead two string-friendly entries for
+%  both the "string" and the "char" types poses no
+%  problems whatsoever, so that might well come on 
+%  top of everything. All this can be obtained as:
 
 >> f = interface(@(s)sin(str2double(s)),"string") + ...
        interface(@(c)sin(str2double(c)), "char" ) + ...
