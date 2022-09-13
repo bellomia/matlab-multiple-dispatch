@@ -129,24 +129,19 @@ function encounter(a,b)
     fprintf("\n • %s meets %s and %s\n",a.name,b.name,act)
 end
 
-%% ON THE COMMAND LINE:
-
->> encounter(fido,rex)
-
+encounter(fido,rex)
+encounter(fido,whisky)
+encounter(whisky,lucy)
+encounter(lucy,rex)
+```
+Producing:
+```
 • Fido meets Rex and sniffs
-
->> encounter(fido,whisky)
-
 • Fido meets Whiskers and chases
-
->> encounter(whisky,lucy)
-
 • Whiskers meets Lucifer and purrs
-
->> encounter(lucy,rex)
-
 • Lucifer meets Rex and hisses
 ```
+
 So you see the magic:
 
 - We feed action with two pets as if it was a regular function
