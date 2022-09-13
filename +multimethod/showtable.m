@@ -9,5 +9,6 @@ function showtable(functor)
     methods = tab(1:2:end)';
     types = tab(2:2:end)';
     tab = table(methods,types);
+    disp(" ")
     disp(tab)
 end

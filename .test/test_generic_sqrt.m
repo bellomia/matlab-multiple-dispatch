@@ -10,7 +10,7 @@ function test_sqrt_dispatch
     eval("import multimethod.addmethod") % statements and gives error...
 
     disp("Let's start with standard matlab sqrt for generic numbers")
-    multisqrt = interface(@(z)sqrt(z),"numeric");
+    multisqrt = interface(@(z)sqrt(z),"float");
     multimethod.showtable(multisqrt)
 
     disp("Let's add a method for character arrays")

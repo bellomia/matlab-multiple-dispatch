@@ -8,11 +8,11 @@ function dispatch_on_nargin
     eval("import multimethod.interface") % stupid matlab pre-analyzes these
     eval("import multimethod.addmethod") % statements and gives error...
 
-    f = multimethod.interface(@(x)sin(x),"numeric");
+    f = multimethod.interface(@(x)sin(x),"float");
     f = addmethod(f,@(c)sin(str2double(c)),"char");
     f = addmethod(f,@(s)sin(str2double(s)),"string");
-    f = addmethod(f,@(x,y)(sin(x)^2+cos(x)^2),["numeric","numeric"]);
-    f = addmethod(f,@(x,y,z)euclidean_norm(x,y,z),["numeric","numeric","numeric"]);
+    f = addmethod(f,@(x,y)(sin(x)^2+cos(x)^2),["float","float"]);
+    f = addmethod(f,@(x,y,z)euclidean_norm(x,y,z),["float","float","float"]);
 
     multimethod.showtable(f)
 
