@@ -1,10 +1,10 @@
 # Ergonomic Multiple Dispatch in Matlab
 
-[![R2020a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2020a?label=R2020a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2020a.yaml)
-[![R2020b](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2020b?label=R2020b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021a.yaml)
-[![R2021a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2021a?label=R2021a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021a.yaml)
-[![R2021b](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2021b?label=R2021b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021b.yaml)
-[![R2022a](https://img.shields.io/github/workflow/status/bellomia/matlab-multiple-dispatch/R2022a?label=R2022a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2022a.yaml)
+[![R2020a](https://img.shields.io/github/actions/workflow/status/bellomia/matlab-multiple-dispatch/R2020a.yaml?label=R2020a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2020a.yaml)
+[![R2020b](https://img.shields.io/github/actions/workflow/status/bellomia/matlab-multiple-dispatch/R2020b.yaml?label=R2020b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2020b.yaml)
+[![R2021a](https://img.shields.io/github/actions/workflow/status/bellomia/matlab-multiple-dispatch/R2021a.yaml?label=R2021a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021a.yaml)
+[![R2021b](https://img.shields.io/github/actions/workflow/status/bellomia/matlab-multiple-dispatch/R2021b.yaml?label=R2021b&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2021b.yaml)
+[![R2022a](https://img.shields.io/github/actions/workflow/status/bellomia/matlab-multiple-dispatch/R2022a.yaml?label=R2022a&style=flat-square&logo=github)](https://github.com/bellomia/matlab-multiple-dispatch/actions/workflows/R2022a.yaml)
 [![Codecov](https://img.shields.io/codecov/c/github/bellomia/matlab-multiple-dispatch?label=coverage&logo=codecov&style=flat-square)](https://codecov.io/gh/bellomia/matlab-multiple-dispatch)
 ![Lifecycle:Experimental](https://img.shields.io/static/v1?label=lifecycle&message=experimental&logo=git&color=gold&style=flat-square)
 
